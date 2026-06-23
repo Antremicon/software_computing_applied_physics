@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7911b60e-27bc-44e5-acff-331217569852</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>software_computing_applied_physics.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,13 +21,29 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="software_computing_applied_physics.py" />
+    <Compile Include="main.py" />
+    <Compile Include="models\logistic.py" />
+    <Compile Include="models\age_structured.py" />
+    <Compile Include="models\birth_death.py" />
+    <Compile Include="models\init.py" />
+    <Compile Include="models\predator_prey.py" />
+    <Compile Include="tests\test_age_structured.py" />
+    <Compile Include="tests\test_birth_death.py" />
+    <Compile Include="tests\test_logistic.py" />
+    <Compile Include="tests\test_monte_carlo.py" />
+    <Compile Include="tests\test_predator_prey.py" />
+    <Compile Include="tests\test_utils.py" />
+    <Compile Include="utils.py" />
+    <Compile Include="monte_carlo.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".github\copilot-instructions.md" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".github\" />
+    <Folder Include="models\" />
+    <Folder Include="tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
