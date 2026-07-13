@@ -11,6 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>software_computing_applied_physics</Name>
     <RootNamespace>software_computing_applied_physics</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -27,6 +29,7 @@
     <Compile Include="models\birth_death.py" />
     <Compile Include="models\init.py" />
     <Compile Include="models\predator_prey.py" />
+    <Compile Include="monte_carlo.py" />
     <Compile Include="tests\test_age_structured.py" />
     <Compile Include="tests\test_birth_death.py" />
     <Compile Include="tests\test_logistic.py" />
@@ -34,7 +37,6 @@
     <Compile Include="tests\test_predator_prey.py" />
     <Compile Include="tests\test_utils.py" />
     <Compile Include="utils.py" />
-    <Compile Include="monte_carlo.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".github\copilot-instructions.md" />
