@@ -126,6 +126,10 @@ class AgeStructured:
             SimulationResult with total and per-age-group population series,
             plus births and deaths event series.
         """
+
+        if self.seed is not None:
+            monte_carlo.set_seed(self.seed)
+
         current_distribution = self.initial_age_distribution.copy()
 
         total_population_over_time = [sum(current_distribution)]
