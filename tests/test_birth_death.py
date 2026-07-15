@@ -1,6 +1,7 @@
 import pytest
 
 from models.birth_death import SimpleBirthDeath
+from utils import SimulationResult
 
 
 def test_invalid_parameters():
@@ -30,17 +31,21 @@ def test_invalid_parameters():
 
 
 def test_run_output_structure_and_types():
-    """Run returns expected keys and types; lengths match generations."""
-    model = SimpleBirthDeath(lambda_birth=0.4, mu_death=0.2, initial_population=10, generations=5, seed=42)
+    """Run returns SimulationResult with expected shape and types."""
+    model = SimpleBirthDeath(
+        lambda_birth=0.4,
+        mu_death=0.2,
+        initial_population=10,
+        generations=5,
+        seed=42,
+    )
     results = model.run()
 
-    assert "population_over_time" in results
-    assert "births_per_generation" in results
-    assert "deaths_per_generation" in results
+    assert isinstance(results, SimulationResult)
 
-    pop = results["population_over_time"]
-    births = results["births_per_generation"]
-    deaths = results["deaths_per_generation"]
+    pop = results.populations["population"]
+    births = results.events["births"]
+    deaths = results.events["deaths"]
 
     assert len(pop) == 6  # generations + 1
     assert len(births) == 5
@@ -70,8 +75,8 @@ def test_population_non_negative_and_clamping():
     model = SimpleBirthDeath(lambda_birth=1e-6, mu_death=1.0, initial_population=5, generations=10, seed=7)
     results = model.run()
 
-    pop = results["population_over_time"]
-    deaths = results["deaths_per_generation"]
+    pop = results.populations["population"]
+    deaths = results.events["deaths"]
 
     assert all(p >= 0 for p in pop)
     # deaths cannot exceed population at that generation (births may increase it)

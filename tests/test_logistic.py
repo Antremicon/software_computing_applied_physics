@@ -1,6 +1,7 @@
 import pytest
 
 from models.logistic import Logistic
+from utils import SimulationResult
 
 
 def test_invalid_parameters():
@@ -36,7 +37,7 @@ def test_invalid_parameters():
 
 
 def test_run_output_structure_and_types():
-    """Run returns expected keys and types; all values are non-negative."""
+    """Run returns SimulationResult with expected shape and types."""
     model = Logistic(
         lambda_birth=0.4,
         mu_death=0.1,
@@ -47,13 +48,11 @@ def test_run_output_structure_and_types():
     )
     results = model.run()
 
-    assert "population_over_time" in results
-    assert "births_per_generation" in results
-    assert "deaths_per_generation" in results
+    assert isinstance(results, SimulationResult)
 
-    pop = results["population_over_time"]
-    births = results["births_per_generation"]
-    deaths = results["deaths_per_generation"]
+    pop = results.populations["population"]
+    births = results.events["births"]
+    deaths = results.events["deaths"]
 
     assert len(pop) == 6  # generations + 1
     assert len(births) == 5
@@ -88,7 +87,7 @@ def test_population_non_negative():
     )
     results = model.run()
 
-    pop = results["population_over_time"]
+    pop = results.populations["population"]
     assert all(p >= 0 for p in pop)
 
 

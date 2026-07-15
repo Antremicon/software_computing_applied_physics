@@ -1,6 +1,7 @@
 import pytest
 
 from models.predator_prey import PredatorPrey
+from utils import SimulationResult
 
 
 def test_invalid_parameters():
@@ -45,7 +46,7 @@ def test_invalid_parameters():
 
 
 def test_run_output_structure_and_types():
-    """Run returns expected keys and types for both species."""
+    """Run returns SimulationResult with expected shape and types."""
     model = PredatorPrey(
         lambda_prey=0.4,
         mu_prey=0.1,
@@ -59,24 +60,14 @@ def test_run_output_structure_and_types():
     )
     results = model.run()
 
-    # Check all expected keys
-    expected_keys = {
-        "prey_population_over_time",
-        "predator_population_over_time",
-        "prey_births_per_generation",
-        "prey_deaths_per_generation",
-        "predator_births_per_generation",
-        "predator_deaths_per_generation",
-    }
-    assert set(results.keys()) == expected_keys
+    assert isinstance(results, SimulationResult)
 
-    # Check lengths
-    prey_pop = results["prey_population_over_time"]
-    pred_pop = results["predator_population_over_time"]
-    prey_births = results["prey_births_per_generation"]
-    prey_deaths = results["prey_deaths_per_generation"]
-    pred_births = results["predator_births_per_generation"]
-    pred_deaths = results["predator_deaths_per_generation"]
+    prey_pop = results.populations["prey"]
+    pred_pop = results.populations["predators"]
+    prey_births = results.events["prey_births"]
+    prey_deaths = results.events["prey_deaths"]
+    pred_births = results.events["predator_births"]
+    pred_deaths = results.events["predator_deaths"]
 
     assert len(prey_pop) == 6  # generations + 1
     assert len(pred_pop) == 6
@@ -118,8 +109,8 @@ def test_populations_non_negative():
     )
     results = model.run()
 
-    prey_pop = results["prey_population_over_time"]
-    pred_pop = results["predator_population_over_time"]
+    prey_pop = results.populations["prey"]
+    pred_pop = results.populations["predators"]
 
     assert all(p >= 0 for p in prey_pop)
     assert all(p >= 0 for p in pred_pop)

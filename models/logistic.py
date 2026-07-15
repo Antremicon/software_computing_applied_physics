@@ -5,6 +5,7 @@ capacity K. Discrete-time generations with Monte Carlo sampling of births
 and deaths each generation.
 """
 import monte_carlo
+from utils import SimulationResult
 
 
 class Logistic:
@@ -92,13 +93,11 @@ class Logistic:
             p = 1.0
         return p
 
-    def run(self) -> dict:
+    def run(self) -> SimulationResult:
         """Run the logistic simulation.
 
-        Returns a dict with:
-         - 'population_over_time': list of population sizes (len = generations + 1)
-         - 'births_per_generation'
-         - 'deaths_per_generation'
+        Returns:
+            SimulationResult with one population series and two event series.
         """
         population_over_time = [self.initial_population]
         births_per_generation = []
@@ -119,8 +118,22 @@ class Logistic:
 
             population_over_time.append(current_population)
 
-        return {
-            "population_over_time": population_over_time,
-            "births_per_generation": births_per_generation,
-            "deaths_per_generation": deaths_per_generation,
-        }
+        result = SimulationResult(
+            model_name="logistic",
+            populations={"population": population_over_time},
+            events={
+                "births": births_per_generation,
+                "deaths": deaths_per_generation,
+            },
+            parameters={
+                "lambda_birth": self.lambda_birth,
+                "mu_death": self.mu_death,
+                "carrying_capacity": self.carrying_capacity,
+                "initial_population": self.initial_population,
+                "generations": self.generations,
+            },
+            seed=self.seed,
+        )
+        result.validate_lengths()
+
+        return result

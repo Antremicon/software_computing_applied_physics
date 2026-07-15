@@ -5,6 +5,7 @@ deaths increase with predator density. Predator births depend on prey
 availability; deaths are constant.
 """
 import monte_carlo
+from utils import SimulationResult
 
 
 class PredatorPrey:
@@ -121,16 +122,12 @@ class PredatorPrey:
         p = self.lambda_pred * (float(prey) / float(self.initial_prey))
         return min(1.0, max(0.0, p))
 
-    def run(self) -> dict:
+    def run(self) -> SimulationResult:
         """Run the predator-prey simulation.
 
-        Returns a dict with:
-         - 'prey_population_over_time': list of prey populations
-         - 'predator_population_over_time': list of predator populations
-         - 'prey_births_per_generation': list of prey births per generation
-         - 'prey_deaths_per_generation': list of prey deaths per generation
-         - 'predator_births_per_generation': list of predator births
-         - 'predator_deaths_per_generation': list of predator deaths
+        Returns:
+            SimulationResult with prey and predator population series and
+            corresponding event series.
         """
         prey_population_over_time = [self.initial_prey]
         predator_population_over_time = [self.initial_predators]
@@ -170,11 +167,30 @@ class PredatorPrey:
             prey_population_over_time.append(current_prey)
             predator_population_over_time.append(current_predators)
 
-        return {
-            "prey_population_over_time": prey_population_over_time,
-            "predator_population_over_time": predator_population_over_time,
-            "prey_births_per_generation": prey_births_per_generation,
-            "prey_deaths_per_generation": prey_deaths_per_generation,
-            "predator_births_per_generation": predator_births_per_generation,
-            "predator_deaths_per_generation": predator_deaths_per_generation,
-        }
+        result = SimulationResult(
+            model_name="predator_prey",
+            populations={
+                "prey": prey_population_over_time,
+                "predators": predator_population_over_time,
+            },
+            events={
+                "prey_births": prey_births_per_generation,
+                "prey_deaths": prey_deaths_per_generation,
+                "predator_births": predator_births_per_generation,
+                "predator_deaths": predator_deaths_per_generation,
+            },
+            parameters={
+                "lambda_prey": self.lambda_prey,
+                "mu_prey": self.mu_prey,
+                "lambda_pred": self.lambda_pred,
+                "mu_pred": self.mu_pred,
+                "predation_rate": self.predation_rate,
+                "initial_prey": self.initial_prey,
+                "initial_predators": self.initial_predators,
+                "generations": self.generations,
+            },
+            seed=self.seed,
+        )
+        result.validate_lengths()
+
+        return result

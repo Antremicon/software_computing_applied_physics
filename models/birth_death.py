@@ -4,6 +4,7 @@ This module implements a basic stochastic population model where each
 individual has a constant birth rate λ and death rate μ per generation.
 """
 import monte_carlo
+from utils import SimulationResult
 
 
 class SimpleBirthDeath:
@@ -79,17 +80,14 @@ class SimpleBirthDeath:
         if self.generations <= 0:
             raise ValueError("generations must be > 0")
 
-    def run(self) -> dict:
+    def run(self) -> SimulationResult:
         """Run the birth-death simulation.
 
         Simulates the population over the specified number of generations.
         Each generation: sample births, sample deaths, update population.
 
         Returns:
-            Dictionary with keys:
-            - 'population_over_time': list of population sizes
-            - 'births_per_generation': list of births per generation
-            - 'deaths_per_generation': list of deaths per generation
+            SimulationResult with one population series and two event series.
         """
         population_over_time = [self.initial_population]
         births_per_generation = []
@@ -110,8 +108,21 @@ class SimpleBirthDeath:
 
             population_over_time.append(current_population)
 
-        return {
-            "population_over_time": population_over_time,
-            "births_per_generation": births_per_generation,
-            "deaths_per_generation": deaths_per_generation,
-        }
+        result = SimulationResult(
+            model_name="simple_birth_death",
+            populations={"population": population_over_time},
+            events={
+                "births": births_per_generation,
+                "deaths": deaths_per_generation,
+            },
+            parameters={
+                "lambda_birth": self.lambda_birth,
+                "mu_death": self.mu_death,
+                "initial_population": self.initial_population,
+                "generations": self.generations,
+            },
+            seed=self.seed,
+        )
+        result.validate_lengths()
+
+        return result
