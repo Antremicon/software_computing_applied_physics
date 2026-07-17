@@ -3,11 +3,6 @@ import pytest
 import monte_carlo
 
 
-# ==============================================================================
-# Test 1: Reproducibility
-# Purpose: Verify that simulations can be reproduced by setting the same seed.
-# ==============================================================================
-
 def test_seed_reproducibility_bernoulli():
     """Test reproducibility of Bernoulli trials.
 
@@ -61,11 +56,6 @@ def test_seed_reproducibility_uniform():
 
     assert samples1 == samples2
 
-
-# ==============================================================================
-# Test 2: Edge Cases
-# Purpose: Verify correct behavior at boundary conditions (p=0, p=1, n=0).
-# ==============================================================================
 
 def test_bernoulli_probability_zero():
     """Test Bernoulli with zero probability.
@@ -128,12 +118,6 @@ def test_binomial_probability_one():
         assert result == n
 
 
-# ==============================================================================
-# Test 3: Range and Bounds
-# Purpose: Verify that outputs fall within expected ranges and have correct
-# types.
-# ==============================================================================
-
 def test_bernoulli_returns_bool():
     """Test that Bernoulli returns a boolean type.
 
@@ -181,11 +165,6 @@ def test_uniform_in_range():
         assert isinstance(result, float)
         assert a <= result <= b
 
-
-# ==============================================================================
-# Test 4: Input Validation and Error Handling
-# Purpose: Verify that invalid inputs raise appropriate exceptions.
-# ==============================================================================
 
 def test_bernoulli_invalid_probability_negative():
     """Test that Bernoulli rejects negative probability.

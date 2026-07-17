@@ -30,6 +30,9 @@
     <Compile Include="models\logistic.py" />
     <Compile Include="models\predator_prey.py" />
     <Compile Include="monte_carlo.py" />
+    <Compile Include="tests\test_main.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\test_age_structured.py" />
     <Compile Include="tests\test_birth_death.py" />
     <Compile Include="tests\test_logistic.py" />

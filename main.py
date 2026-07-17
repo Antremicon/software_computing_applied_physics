@@ -1,16 +1,14 @@
 """Command-line interface for stochastic population simulations."""
 
-
 import argparse
 import sys
-
 
 from models.age_structured import AgeStructured
 from models.birth_death import SimpleBirthDeath
 from models.logistic import Logistic
 from models.predator_prey import PredatorPrey
 from utils import SimulationResult
- 
+
 
 def parse_float_list(value: str) -> list[float]:
     """Parse a comma-separated string into a list of floats.
